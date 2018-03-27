@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by http://cafe.naver.com/citrineframework
+	You can freely copy, distribute, modify for commercial or non-commercial purposes.
+-->
+<MOML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.applusform.com/xsd/moml_ui.xsd" version="1.1.1">
+
+
+	<FUNCTION id="goBtnVisibleAni(url, title, appUrl)">
+		<CMD condition="appUrl" cmd="caller.container.appBtnLayout.visible=true" elseCmd="caller.container.appBtnLayout.visible=false" />
+		<CMD cmd="userVariable.listItem = caller.container.listWindow.fullId" />
+		<CMD cmd="userVariable.listBtn = caller.container.listBtn.leftfullId" />
+		<CMD cmd="userVariable.listPrevItem = caller.container.listWindow.fullId" />
+		<CMD cmd="userVariable.listPrevBtn = caller.container.listBtn.fullId" />
+		<CMD cmd="caller.container.listBtn.visible='invisible'" />
+		<CMD condition="caller.left ge 500" cmd="caller.container.listWindow.left = 0, caller.left = 0, animation.flyIn(userVariable.listItem, 500,0,720,200,'easeOut4',1000,'')" elseCmd="caller.container.listWindow.left = 500, caller.left = 500, animation.flyIn(userVariable.listItem, -500,0,720,200,'easeOut4',1000,'')" />
+		<CMD cmd="caller.visible='visible'" delay="1000" />
+	</FUNCTION>
+
+
+	<FUNCTION id="aniCheck">
+		<CMD condition="caller.container.aniWindow.visible == 'invisible'" cmd="function.aniShow" elseCmd="function.aniHide" />
+	</FUNCTION>
+
+	<FUNCTION id="aniShow">
+		<CMD cmd="animation.show('caller.container.listWindow', 'fade', '', 500, '')" />
+		<CMD cmd="animation.flyIn('caller.container.aniWindow', 720, 0, caller.container.aniWindow.width, caller.container.aniWindow.height, 'easeOut3|backOut7', 1000, '')" />
+	</FUNCTION>
+
+	<FUNCTION id="aniHide">
+		<CMD cmd="animation.hide('caller.container.listWindow', 'fade', '', 500, '')" />
+		<CMD cmd="animation.flyOut('caller.container.aniWindow', 720, 0, caller.container.aniWindow.width, caller.container.aniWindow.height, 'easeOut7', 1000, '')" />
+	</FUNCTION>
+
+
+	<FUNCTION id="aniHeart">
+		<CMD cmd="animation.flyIn('caller.container.heart', -200, 0, 0, 0, 'easeOut7', 1000, '')" />
+		<CMD cmd="animation.flyOut('caller.container.heart', 292, 364, 38,38, 'easeOut7', 1000, '')" delay="800" />
+		<CMD cmd="caller.container.heartImage.defaultImg='res/ic_heart_liked.png'" delay="1800" />
+	</FUNCTION>
+
+
+	<CMD cmd="userVariable.aniValue = 'false'" />
+	<UILAYOUT portrait="720,1230" landscape="720,1230">
+		<WINDOW layout="0,0,720,1230" defaultImg="#000000" align="relative">
+			<WINDOW layout="0,0,720,96" defaultImg="#ffffff" align="relative">
+				<LABEL layout="0,0,720,96" text="EXPLORE" fontSize="50" fontFace="res/WhitneyCondensed-Bold.otf" minFontSize="-1" textAlign="center" textColor="#3f3e3e" />
+			</WINDOW>
+			<LIST layout="0,96,720,1134" dataSource="http://feeds.feedburner.com/tedtalks_video" dataList="/rss/channel/item" divider="none">
+				<LISTLAYOUT>
+					<WINDOW layout="0,0,720,720" defaultImg="{xpath.evaluate('./media:thumbnail/@url')}" onFlickRight="function.aniHeart" onFlickLeft="function.aniCheck">
+						<BUTTON layout="657,34,42,42" defaultImg="res/ic_share.png" />
+						<LABEL layout="50,0,620,720" text="{xpath.evaluate('./itunes:subtitle/text()')}" fontSize="40" fontFace="res/WhitneyCondensed-Bold.otf" minFontSize="-1" textAlign="center" textColor="#ffffff" />
+						<IMAGE layout="400,665,36,36" defaultImg="res/ic_ellipse.png" />
+						<IMAGE layout="490,664,38,38" defaultImg="res/ic_comment_collectible.png" />
+						<LABEL layout="540,664,59,38" text="35" fontSize="25" fontFace="res/WhitneyCondensed-Bold.otf" minFontSize="-1" textAlign="vCenter" textColor="#ffffff" />
+						<IMAGE id="heartImage" layout="592,664,38,38" defaultImg="res/ic_heart_empty.png" onClick="caller.container.heartImage.defaultImg='res/ic_heart_empty.png'" />
+						<LABEL layout="638,664,74,38" text="19K" fontSize="25" fontFace="res/WhitneyCondensed-Bold.otf" minFontSize="-1" textAlign="vCenter" textColor="#ffffff" />
+					</WINDOW>
+					<WINDOW id="listWindow" layout="0,0,720,720" defaultImg="#99ffffff" visible="invisible" onClick="none" />
+					<STYLEBUTTON id="aniWindow" layout="110,110,500,500" defaultImg="#ffffff" shape="roundRect(30)" visible="invisible" enabled="false" align="linear:vertical">
+						<LABEL layout="500,123" text="Share" fontSize="50" fontFace="res/WhitneyCondensed-Light.otf" minFontSize="-1" textAlign="center" textColor="#3f3e3e" onClick="device.toastPopup('Share'),function.aniHide" />
+						<LABEL layout="500,2" defaultImg="#eeeeee" />
+						<LABEL layout="500,123" text="Subscribe" fontSize="50" fontFace="res/WhitneyCondensed-Light.otf" minFontSize="-1" textAlign="center" textColor="#3f3e3e"
+							onClick="device.toastPopup('Subscribe'),function.aniHide" />
+						<LABEL layout="500,2" defaultImg="#eeeeee" />
+						<LABEL layout="500,123" text="Flag" fontSize="50" fontFace="res/WhitneyCondensed-Light.otf" minFontSize="-1" textAlign="center" textColor="#3f3e3e" onClick="device.toastPopup('Flag'),function.aniHide" />
+						<LABEL layout="500,2" defaultImg="#eeeeee" />
+						<LABEL layout="500,123" text="Remove" fontSize="50" fontFace="res/WhitneyCondensed-Light.otf" minFontSize="-1" textAlign="center" textColor="#c84954" onClick="device.toastPopup('Remove'),function.aniHide" />
+					</STYLEBUTTON>
+					<IMAGE id="heart" layout="300,300,135,135" defaultImg="res/ic_heart_collectible_gray.png" visible="invisible" />
+					<WINDOW layout="0,0,720,10" defaultImg="#99ffffff" align="relative" />
+				</LISTLAYOUT>
+			</LIST>
+		</WINDOW>
+	</UILAYOUT>
+</MOML>  
+		     
